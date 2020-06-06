@@ -111,7 +111,7 @@ public class ProfileListAdd {
      * @param startN
      * @param endMillis
      */
-    private static void runProfiler(String title, Timeable timeable, int startN, int endMillis) {
+    static void runProfiler(String title, Timeable timeable, int startN, int endMillis) {
         Profiler profiler = new Profiler(title, timeable);
         XYSeries series = profiler.timingLoop(startN, endMillis);
         profiler.plotResults(series);

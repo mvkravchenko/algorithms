@@ -255,14 +255,22 @@ public class MyLinkedList<E> implements List<E> {
         if (fromIndex < 0 || toIndex >= size || fromIndex > toIndex) {
             throw new IndexOutOfBoundsException();
         }
-        // TODO: classify this and improve it.
-        int i = 0;
-        MyLinkedList<E> list = new MyLinkedList<E>();
-        for (Node<E> node=head; node != null; node = node.next) {
-            if (i >= fromIndex && i <= toIndex) {
-                list.add(node.data);
+
+        List<E> list = new MyLinkedList<E>();
+        List<E> arrayList = new MyArrayList<>();
+        Node<E> node = head;
+        //linear
+        for (int i = 0; i <= toIndex; i++) {
+            if (i >= fromIndex) {
+                //constant
+                arrayList.add(node.data);
             }
-            i++;
+            node = node.next;
+        }
+        //linear
+        for (int j = arrayList.size()-1; j>=0; j--){
+            //constant
+            list.add(0, arrayList.get(j));
         }
         return list;
     }
