@@ -15,6 +15,14 @@ public class WikiFetcher {
 
     private long lastRequestTime = -1;
     private long minInterval = 1000;
+    private static final WikiFetcher INSTANCE = new WikiFetcher();
+
+    private WikiFetcher() {
+    }
+
+    public static WikiFetcher getInstance() {
+        return INSTANCE;
+    }
 
     /**
      * Fetches and parses a URL string, returning a list of paragraph elements.
@@ -86,7 +94,7 @@ public class WikiFetcher {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        WikiFetcher wf = new WikiFetcher();
+        WikiFetcher wf = getInstance();
         String url = "https://en.wikipedia.org/wiki/Java_(programming_language)";
         Elements paragraphs = wf.fetchWikipedia(url);
 
