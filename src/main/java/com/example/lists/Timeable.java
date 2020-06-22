@@ -1,3 +1,5 @@
+package com.example.lists;
+
 public interface Timeable {
     /*
      * setup is invoked before the clock starts.

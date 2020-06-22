@@ -1,3 +1,5 @@
+package com.example.lists;
+
 import org.apache.commons.math3.stat.regression.SimpleRegression;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -68,7 +70,7 @@ public class Profiler extends ApplicationFrame {
     }
 
     /**
-     * Invokes setup and timeMe on the embedded Timeable.
+     * Invokes setup and timeMe on the embedded com.example.lists.Timeable.
      *
      * @param n
      * @return

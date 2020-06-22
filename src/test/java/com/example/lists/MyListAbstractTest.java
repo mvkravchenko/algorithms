@@ -1,3 +1,6 @@
+package com.example.lists;
+
+import com.example.lists.MyArrayList;
 import org.junit.Before;
 import org.junit.Test;
 

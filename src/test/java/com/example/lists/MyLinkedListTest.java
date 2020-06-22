@@ -1,6 +1,4 @@
-import org.junit.Before;
-
-import java.util.ArrayList;
+package com.example.lists;
 
 public class MyLinkedListTest extends MyListAbstractTest<MyLinkedList> {
 
