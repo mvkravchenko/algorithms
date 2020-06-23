@@ -96,12 +96,12 @@ class MyLinearMapTest {
     @Test
     public void testPut() {
         map.put("One", 11);
-        assertThat(map.size(), is(4));
-        assertThat(map.get("One"), is(11));
+        assertThat(map.size(), comparesEqualTo(4));
+        assertThat(map.get("One"), comparesEqualTo(11));
 
         map.put("Five", 5);
-        assertThat(map.size(), is(5));
-        assertThat(map.get("Five"), is(5));
+        assertThat(map.size(), comparesEqualTo(5));
+        assertThat(map.get("Five"), comparesEqualTo(5));
     }
 
     /**

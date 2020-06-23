@@ -74,7 +74,6 @@ public class Index {
      * @param paragraphs  Collection of elements that should be indexed.
      */
     public void indexPage(String url, Elements paragraphs) {
-        // TODO: Your code here
 
         // make a TermCounter and count the terms in the paragraphs
         TermCounter termCounter = new TermCounter(url);
