@@ -47,30 +47,6 @@ public class WikiFetcher {
     }
 
     /**
-     * Reads the contents of a Wikipedia page from src/resources.
-     *
-     * @param url
-     * @return
-     * @throws IOException
-     */
-    public Elements readWikipedia(String url) throws IOException {
-        URL realURL = new URL(url);
-
-        // assemble the file name
-        String slash = File.separator;
-        String filename = "resources" + slash + realURL.getHost() + realURL.getPath();
-
-        // read the file
-        InputStream stream = WikiFetcher.class.getClassLoader().getResourceAsStream(filename);
-        Document doc = Jsoup.parse(stream, "UTF-8", filename);
-
-        // parse the contents of the file
-        Element content = doc.getElementById("mw-content-text");
-        Elements paras = content.select("p");
-        return paras;
-    }
-
-    /**
      * Rate limits by waiting at least the minimum interval between requests.
      */
     private void sleepIfNeeded() {
