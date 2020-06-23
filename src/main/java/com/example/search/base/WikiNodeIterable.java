@@ -1,4 +1,4 @@
-package com.example.search;
+package com.example.search.base;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;

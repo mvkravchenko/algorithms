@@ -1,4 +1,4 @@
-package com.example.search;
+package com.example.search.base;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -42,30 +42,6 @@ public class WikiFetcher {
         Element content = doc.getElementById("mw-content-text");
 
         // TODO: avoid selecting paragraphs from sidebars and boxouts
-        Elements paras = content.select("p");
-        return paras;
-    }
-
-    /**
-     * Reads the contents of a Wikipedia page from src/resources.
-     *
-     * @param url
-     * @return
-     * @throws IOException
-     */
-    public Elements readWikipedia(String url) throws IOException {
-        URL realURL = new URL(url);
-
-        // assemble the file name
-        String slash = File.separator;
-        String filename = "resources" + slash + realURL.getHost() + realURL.getPath();
-
-        // read the file
-        InputStream stream = WikiFetcher.class.getClassLoader().getResourceAsStream(filename);
-        Document doc = Jsoup.parse(stream, "UTF-8", filename);
-
-        // parse the contents of the file
-        Element content = doc.getElementById("mw-content-text");
         Elements paras = content.select("p");
         return paras;
     }
