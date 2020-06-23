@@ -53,7 +53,7 @@ public class TermCounter {
      *
      * @param root
      */
-    public void processTree(Node root) {
+    private void processTree(Node root) {
         // NOTE: we could use select to find the TextNodes, but since
         // we already have a tree iterator, let's use it.
         for (Node node: new WikiNodeIterable(root)) {
@@ -68,7 +68,7 @@ public class TermCounter {
      *
      * @param text  The text to process.
      */
-    public void processText(String text) {
+    private void processText(String text) {
         // replace punctuation with spaces, convert to lower case, and split on whitespace
         String[] array = text.replaceAll("\\pP", " ").
                 toLowerCase().
