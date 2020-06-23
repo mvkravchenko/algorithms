@@ -96,6 +96,7 @@ public class WikiFetcher {
     public static void main(String[] args) throws IOException {
         WikiFetcher wf = getInstance();
         String url = "https://en.wikipedia.org/wiki/Java_(programming_language)";
+//        String url = "https://en.wikipedia.org/wiki/Wikipedia:The_blank_page";
         Elements paragraphs = wf.fetchWikipedia(url);
 
         for (Element paragraph: paragraphs) {

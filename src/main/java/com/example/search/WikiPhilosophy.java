@@ -1,13 +1,23 @@
 package com.example.search;
 
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class WikiPhilosophy {
 
-    final static List<String> visited = new ArrayList<String>();
-    final static WikiFetcher wf = WikiFetcher.getInstance();
+    private final static List<String> visited = new ArrayList<>();
+    private final static WikiFetcher wf = WikiFetcher.getInstance();
+
+    private static final Logger LOG = LoggerFactory.getLogger(WikiPhilosophy.class);
+    private static final String LINK_NOT_FOUND = "Empty content error. Valid link not found on page %s. Visited pages: %s";
+    private static final String LOOP_ERR = "We are looped. Exit. Visited pages: %s";
+    private static final String LIMIT_EXCEEDED = "Failed to get to the Philosophy page within the limit of %s attempts.";
 
     /**
      * Tests a conjecture about Wikipedia and Philosophy.
@@ -25,7 +35,8 @@ public class WikiPhilosophy {
     public static void main(String[] args) throws IOException {
         String destination = "https://en.wikipedia.org/wiki/Philosophy";
         String source = "https://en.wikipedia.org/wiki/Java_(programming_language)";
-
+//        String source = "https://en.wikipedia.org/wiki/Wikipedia:Getting_to_Philosophy";
+//        String source = "https://en.wikipedia.org/wiki/Javanese_language";
         testConjecture(destination, source, 10);
     }
 
@@ -37,6 +48,40 @@ public class WikiPhilosophy {
      * @throws IOException
      */
     public static void testConjecture(String destination, String source, int limit) throws IOException {
-        // TODO: FILL THIS IN!
+        String url = source;
+        boolean found = false;
+        for (int i = 0; i< limit; i++) {
+            if (visited.contains(url)) {
+                LOG.error(format(LOOP_ERR, visited));
+                break;
+            } else {
+                visited.add(url);
+                Element link = getFirstValidLink(url);
+                if (link == null) {
+                    LOG.error(format(LINK_NOT_FOUND, url, visited));
+                    break;
+                }
+                LOG.info("**{}**", link.text());
+                if (link.attr("abs:href").equals(destination)){
+                    LOG.info("Success!");
+                    found = true;
+                    break;
+                }
+                url = link.absUrl("abs:href");
+            }
+        }
+        if (!found)
+            LOG.error(format(LIMIT_EXCEEDED, limit));
+    }
+
+    private static Element getFirstValidLink(String url) throws IOException {
+        LOG.info("Fetching {}", url);
+        Elements paragraphs = wf.fetchWikipedia(url);
+        WikiParser wp = new WikiParser(paragraphs);
+        return wp.getFirstValidLink();
+    }
+
+    private static String format(String text, Object... args){
+        return String.format(text, args);
     }
 }
