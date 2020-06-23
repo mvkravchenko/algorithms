@@ -1,5 +1,6 @@
-package com.example.search;
+package com.example.search.crawler;
 
+import com.example.search.crawler.WikiParser;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;

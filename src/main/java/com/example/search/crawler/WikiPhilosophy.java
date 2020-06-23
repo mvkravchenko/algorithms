@@ -1,5 +1,6 @@
-package com.example.search;
+package com.example.search.crawler;
 
+import com.example.search.base.WikiFetcher;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;

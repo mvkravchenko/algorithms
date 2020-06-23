@@ -1,5 +1,6 @@
-package com.example.search;
+package com.example.search.crawler;
 
+import com.example.search.base.WikiNodeIterable;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
