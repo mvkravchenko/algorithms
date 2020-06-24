@@ -1,5 +1,7 @@
 package com.example.maps;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class MyHashMap<K, V> extends MyBetterMap<K, V> implements Map<K, V> {
@@ -26,7 +28,11 @@ public class MyHashMap<K, V> extends MyBetterMap<K, V> implements Map<K, V> {
      *
      */
     protected void rehash() {
-        // TODO: FILL THIS IN!
+        List<Map.Entry<K, V>> entries = new ArrayList<>();
+        maps.forEach(map -> entries.addAll(map.getEntries()));
+        super.makeMaps(maps.size() * 2);
+        entries.forEach(entry -> super.put(entry.getKey(), entry.getValue()));
+
     }
 
     /**
