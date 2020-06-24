@@ -1,4 +1,4 @@
-package com.example.lists;
+package com.example.profiler;
 
 public interface Timeable {
     /*

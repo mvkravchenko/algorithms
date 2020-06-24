@@ -1,5 +1,7 @@
 package com.example.lists;
 
+import com.example.profiler.Profiler;
+import com.example.profiler.Timeable;
 import org.jfree.data.xy.XYSeries;
 
 import java.util.LinkedList;
