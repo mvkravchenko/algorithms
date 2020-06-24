@@ -2,7 +2,7 @@ package com.example.maps;
 
 import org.junit.jupiter.api.BeforeEach;
 
-class MyBetterMapTest extends MyLinearMapTest{
+class MyBetterMapTest extends MyMapAbstractTest{
     /**
      * @throws java.lang.Exception
      */
