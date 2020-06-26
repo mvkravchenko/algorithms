@@ -3,6 +3,7 @@ package com.example.maps;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -22,21 +23,21 @@ public class MyTreeMapTest {
         //this node is going to be the root
         MyTreeMap<String, Integer>.Node node08 = map.makeNode("08", 8, null);
 
-        MyTreeMap<String, Integer>.Node node03 = map.makeNode("03", 3);
-        MyTreeMap<String, Integer>.Node node10 = map.makeNode("10", 10);
+        MyTreeMap<String, Integer>.Node node03 = map.makeNode("03", 3, node08);
+        MyTreeMap<String, Integer>.Node node10 = map.makeNode("10", 10, node08);
         node08.left = node03;
         node08.right = node10;
 
-        MyTreeMap<String, Integer>.Node node01 = map.makeNode("01", 1);
-        MyTreeMap<String, Integer>.Node node06 = map.makeNode("06", 6);
-        MyTreeMap<String, Integer>.Node node14 = map.makeNode("14", 14);
+        MyTreeMap<String, Integer>.Node node01 = map.makeNode("01", 1, node03);
+        MyTreeMap<String, Integer>.Node node06 = map.makeNode("06", 6, node03);
+        MyTreeMap<String, Integer>.Node node14 = map.makeNode("14", 14, node10);
         node03.left = node01;
         node03.right = node06;
         node10.right = node14;
 
-        MyTreeMap<String, Integer>.Node node04 = map.makeNode("04", 4);
-        MyTreeMap<String, Integer>.Node node07 = map.makeNode("07", 7);
-        MyTreeMap<String, Integer>.Node node13 = map.makeNode("13", 13);
+        MyTreeMap<String, Integer>.Node node04 = map.makeNode("04", 4, node06);
+        MyTreeMap<String, Integer>.Node node07 = map.makeNode("07", 7, node06);
+        MyTreeMap<String, Integer>.Node node13 = map.makeNode("13", 13, node14);
         node06.left = node04;
         node06.right = node07;
         node14.left = node13;
@@ -156,8 +157,82 @@ public class MyTreeMapTest {
      * Test method for {@link MyLinearMap#remove(java.lang.Object)}.
      */
     @Test
-    public void testRemove() {
-        // nothing to test, since this method is not implemented
+    public void when_remove_not_existing_node_then_return_null_and_map_not_changed() throws NoSuchFieldException, IllegalAccessException {
+        int initialSize = map.size();
+        MyTreeMap.Node root = getRoot(map);
+
+        assertThat(map.remove("not_existing_key"), is(nullValue()));
+        assertThat(map.size(), is(equalTo(initialSize)));
+        assertThat(getRoot(map), is(equalTo(root)));
+
+    }
+
+    @Test
+    public void remove_not_root_node_no_children() throws NoSuchFieldException, IllegalAccessException {
+        int initialSize = map.size();
+        MyTreeMap.Node root = getRoot(map);
+
+        Integer removed = map.remove("01");
+        assertThat(map.size(), is(equalTo(initialSize-1)));
+        assertThat(map.get("01"), is(nullValue()));
+        assertThat(removed, is(equalTo(1)));
+        assertThat("Tree root has changed", getRoot(map), is(equalTo(root)));
+
+    }
+
+    @Test
+    public void remove_root_node_no_childen(){
+        String key = "key";
+        Map<String, Integer> map = new MyTreeMap<>();
+        map.put(key, 100);
+        assertThat(map.size(), is(equalTo(1)));
+
+        Integer removed = map.remove(key);
+        assertThat(map.isEmpty(), is(true));
+        assertThat(removed, is(equalTo(100)));
+    }
+
+    @Test
+    public void remove_not_root_node_with_only_left_child() throws NoSuchFieldException, IllegalAccessException {
+        int initialSize = map.size();
+        MyTreeMap.Node root = getRoot(map);
+
+        Integer removed= map.remove("14");
+        assertThat(map.size(), is(equalTo(initialSize-1)));
+        assertThat(map.get("14"), is(nullValue()));
+        assertThat(removed, is(equalTo(14)));
+        assertThat(getRoot(map), is(equalTo(root)));
+    }
+
+    @Test
+    public void remove_root_node_with__only_left_child() throws NoSuchFieldException, IllegalAccessException {
+        MyTreeMap<Integer, Integer> map = new MyTreeMap<>();
+        map.put(10, 10); map.put(5, 5); map.put(1, 1); map.put(7, 7);
+        //     10
+        //    /
+        //    5
+        //   /\
+        // 1  7
+        MyTreeMap.Node root = getRoot(map);
+        int initialSize = map.size();
+
+        Integer removed = map.remove(10);
+        assertThat(map.size(), is(equalTo(initialSize-1)));
+        assertThat(map.get(10), is(nullValue()));
+        assertThat(removed, is(equalTo(10)));
+        assertThat(getRoot(map).key, is(equalTo(5)));
+    }
+
+    @Test
+    public void remove_not_root_node_with_only_right_child() throws NoSuchFieldException, IllegalAccessException {
+        int initialSize = map.size();
+        MyTreeMap.Node root = getRoot(map);
+
+        Integer removed = map.remove("10");
+        assertThat(map.size(), is(equalTo(initialSize-1)));
+        assertThat(map.get("10"), is(nullValue()));
+        assertThat(removed, is(equalTo(10)));
+        assertThat(getRoot(map), is(equalTo(root)));
     }
 
     /**
@@ -177,5 +252,12 @@ public class MyTreeMapTest {
         assertThat(keySet.size(), is(9));
         assertThat(keySet.contains(3), is(true));
         assertThat(keySet.contains(5), is(false));
+    }
+
+    private MyTreeMap.Node getRoot(MyTreeMap map) throws NoSuchFieldException, IllegalAccessException {
+        Field rootField = MyTreeMap.class.getDeclaredField("root");
+        rootField.setAccessible(true);
+        return (MyTreeMap.Node) rootField.get(map);
+
     }
 }

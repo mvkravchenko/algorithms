@@ -17,14 +17,16 @@ public class MyTreeMap<K, V> implements Map<K, V> {
         public V value;
         public Node left = null;
         public Node right = null;
+        public Node parent = null;
 
         /**
          * @param key
          * @param value
          */
-        public Node(K key, V value) {
+        public Node(K key, V value, Node parent) {
             this.key = key;
             this.value = value;
+            this.parent = parent;
         }
 
     }
@@ -140,7 +142,7 @@ public class MyTreeMap<K, V> implements Map<K, V> {
             throw new NullPointerException();
         }
         if (root == null) {
-            root = new Node(key, value);
+            root = new Node(key, value, null);
             size++;
             return null;
         }
@@ -183,8 +185,77 @@ public class MyTreeMap<K, V> implements Map<K, V> {
 
     @Override
     public V remove(Object key) {
-        // OPTIONAL TODO: FILL THIS IN!
-        throw new UnsupportedOperationException();
+        Node node = findNode(key);
+        if (node == null) {
+            return null;
+
+        }
+
+        V old = node.value;
+        if (node.left == null && node.right == null) {
+            if (equals(root, node)) {
+                //TreeMap gets empty
+                clear();
+                return old;
+            } else {
+                replaceInParent(node, null);
+            }
+        } else if (node.left != null && node.right == null) {
+            if (equals(root, node)) {
+                node.left.parent = null;
+                root = node.left;
+            } else {
+                replaceInParent(node, node.left);
+            }
+        } else if (node.left == null) {
+            if (equals(node, root)) {
+                node.right.parent = null;
+                root = node.right;
+            } else {
+                replaceInParent(node, node.right);
+            }
+        } else {
+            //both children are here
+            Node min = findMinNode(node.right);
+            //substitute the node with min
+            min.parent.left = min.right;
+            min.right.parent = min.parent;
+            node.right.parent = min;
+            node.left.parent = min;
+            min.left = node.left;
+            min.right = node.right;
+            if (equals(node, root)) {
+                root = min;
+            }
+
+        }
+        size--;
+        return old;
+    }
+
+    private void replaceInParent(Node node, Node replacingNode){
+        if (equals(node, node.parent.left)) {
+            node.parent.left = replacingNode;
+            if (replacingNode != null)
+                replacingNode.parent = node.parent;
+        } else {
+            node.parent.right = replacingNode;
+            if (replacingNode != null)
+                replacingNode.parent = node.parent;
+        }
+    }
+
+    /**
+     * Find minimum node in a subtree starting from node
+     * @param node
+     * @return minimum node under the node subtree
+     */
+    private Node findMinNode(Node node){
+        if (node.left != null) {
+            return findMinNode(node.left);
+        } else {
+            return node;
+        }
     }
 
     @Override
@@ -231,8 +302,8 @@ public class MyTreeMap<K, V> implements Map<K, V> {
      * @param value
      * @return
      */
-    public MyTreeMap<K, V>.Node makeNode(K key, V value) {
-        return new Node(key, value);
+    public MyTreeMap<K, V>.Node makeNode(K key, V value, Node parent) {
+        return new Node(key, value, parent);
     }
 
     /**
