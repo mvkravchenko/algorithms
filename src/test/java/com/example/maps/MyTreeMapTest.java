@@ -1,14 +1,12 @@
 package com.example.maps;
 
-import org.hamcrest.core.Is;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.number.OrderingComparison.comparesEqualTo;
 
 public class MyTreeMapTest {
@@ -21,7 +19,8 @@ public class MyTreeMapTest {
     @BeforeEach
     public void setUp() throws Exception {
         map = new MyTreeMap<String, Integer>();
-        MyTreeMap<String, Integer>.Node node08 = map.makeNode("08", 8);
+        //this node is going to be the root
+        MyTreeMap<String, Integer>.Node node08 = map.makeNode("08", 8, null);
 
         MyTreeMap<String, Integer>.Node node03 = map.makeNode("03", 3);
         MyTreeMap<String, Integer>.Node node10 = map.makeNode("10", 10);
@@ -77,7 +76,7 @@ public class MyTreeMapTest {
      */
     @Test
     public void testGet() {
-        assertThat(map.get("01"), is(1));
+        assertThat(map.get("01"), is(equalTo(1)));
         assertThat(map.get("03"), is(3));
         assertThat(map.get("04"), is(4));
         assertThat(map.get("06"), is(6));

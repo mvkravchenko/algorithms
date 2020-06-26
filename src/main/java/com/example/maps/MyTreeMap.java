@@ -21,13 +21,12 @@ public class MyTreeMap<K, V> implements Map<K, V> {
         /**
          * @param key
          * @param value
-         * @param left
-         * @param right
          */
         public Node(K key, V value) {
             this.key = key;
             this.value = value;
         }
+
     }
 
     @Override
@@ -56,7 +55,17 @@ public class MyTreeMap<K, V> implements Map<K, V> {
         @SuppressWarnings("unchecked")
         Comparable<? super K> k = (Comparable<? super K>) target;
 
-        // TODO: FILL THIS IN!
+        Node current = root;
+        while (current != null) {
+            int compare = k.compareTo(current.key);
+            if (compare < 0) {
+                current = current.left;
+            } else if (compare > 0){
+                current = current.right;
+            } else {
+                return current;
+            }
+        }
         return null;
     }
 
@@ -80,8 +89,12 @@ public class MyTreeMap<K, V> implements Map<K, V> {
     }
 
     private boolean containsValueHelper(Node node, Object target) {
-        // TODO: FILL THIS IN!
-        return false;
+        if (node == null)
+            return false;
+        if (equals(target, node.value))
+            return true;
+        Collection<V> values = values();
+        return values.contains(target);
     }
 
     @Override
@@ -106,7 +119,18 @@ public class MyTreeMap<K, V> implements Map<K, V> {
     @Override
     public Set<K> keySet() {
         Set<K> set = new LinkedHashSet<K>();
-        // TODO: FILL THIS IN!
+        Node current = root;
+        Deque<Node> stack = new ArrayDeque<>();
+        while (current !=null || !stack.isEmpty()) {
+            if (current != null) {
+                stack.push(current);
+                current = current.left;
+            } else {
+                current = stack.pop();
+                set.add(current.key);
+                current = current.right;
+            }
+        }
         return set;
     }
 
@@ -124,8 +148,30 @@ public class MyTreeMap<K, V> implements Map<K, V> {
     }
 
     private V putHelper(Node node, K key, V value) {
-        // TODO: FILL THIS IN!
-        return null;
+        Comparable<? super K> k = (Comparable<? super K>) key;
+        int compare = k.compareTo(node.key);
+            if (compare < 0) {
+                if (node.left == null) {
+                    node.left = new Node(key, value, node);
+                    size++;
+                    return null;
+                } else {
+                    return putHelper(node.left, key, value);
+                }
+
+            }
+            if (compare > 0) {
+                if (node.right == null) {
+                    node.right = new Node(key, value, node);
+                    size++;
+                    return null;
+                } else {
+                    return putHelper(node.right, key, value);
+                }
+            }
+        V old = node.value;
+        node.value = value;
+        return old;
     }
 
     @Override
